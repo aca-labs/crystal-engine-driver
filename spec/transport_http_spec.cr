@@ -1,33 +1,26 @@
+require "webmock"
 require "./helper"
 
 describe PlaceOS::Driver::TransportHTTP do
-  it "should perform a secure request" do
-    queue = Helper.queue
-    transport = PlaceOS::Driver::TransportHTTP.new(queue, "https://www.google.com.au/", ::PlaceOS::Driver::Settings.new("{}"))
+  WebMock.stub(:any, "www.example.com")
+
+  queue = Helper.queue
+  transport = PlaceOS::Driver::TransportHTTP.new(queue, "http://www.example.com/", ::PlaceOS::Driver::Settings.new("{}"))
+
+  it "connects" do
     transport.connect
     queue.online.should eq(true)
-
-    # Make a request
-    response = transport.http(:get, "/")
-    response.status_code.should eq(200)
-
-    # Close the connection
-    transport.terminate
   end
 
-  it "should perform an insecure request" do
-    queue = Helper.queue
+  {% for method in %i(get post put head delete patch options) %}
+    it "supports {{method.id.upcase}} requests" do
+      response = transport.http({{method}}, "/")
+      response.status_code.should eq(200)
+    end
+  {% end %}
 
-    # Selected from: https://whynohttps.com/
-    transport = PlaceOS::Driver::TransportHTTP.new(queue, "http://blog.jp/", ::PlaceOS::Driver::Settings.new("{}"))
-    transport.connect
-    queue.online.should eq(true)
-
-    # Make a request
-    response = transport.http(:get, "/")
-    response.status_code.should eq(200)
-
-    # Close the connection
+  it "terminates" do
     transport.terminate
+    queue.online.should eq(true)
   end
 end
