@@ -186,6 +186,7 @@ abstract class PlaceOS::Driver
   {% RESERVED_METHODS["[]"] = true %}
   {% RESERVED_METHODS["[]="] = true %}
   {% RESERVED_METHODS["send"] = true %}
+  {% RESERVED_METHODS["http"] = true %}
   {% for name in HELPERS %}
     {% RESERVED_METHODS[name.id.stringify] = true %}
   {% end %}
