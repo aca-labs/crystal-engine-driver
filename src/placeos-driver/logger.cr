@@ -11,12 +11,12 @@ class PlaceOS::Driver
 
   # Allow signals to change the log level at run-time
   log_level_change = Proc(Signal, Nil).new do |signal|
-    level = signal.usr1? ? ::Log::Severity::Debug : ::Log::Severity::Info
-    Log.info { "> Log level changed to #{level}" }
-
+    level = signal.usr1? ? ::Log::Severity::Trace : ::Log::Severity::Info
     backend = ::Log::IOBackend.new(PlaceOS::Driver.logger_io)
     backend.formatter = PlaceOS::Driver::LOG_FORMATTER
     Log.builder.bind "*", level, backend
+
+    Log.info { "log level changed to #{level}" }
     signal.ignore
   end
 
