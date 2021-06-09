@@ -19,6 +19,9 @@ dependencies:
   ipaddress:
     github: Sija/ipaddress.cr
 
+  placeos-log-backend:
+    github: place-labs/log-backend
+
   promise:
     github: spider-gazelle/promise
 
