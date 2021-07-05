@@ -18,7 +18,7 @@ class PlaceOS::Driver
       {% verbatim do %}
         path = {{path}}
         headers = {{headers}}
-
+        params = {{params}}
         # Build a body (if required)
         {% if body.is_a? NamedTupleLiteral %}
           headers ||= HTTP::Headers.new
